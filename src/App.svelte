@@ -1,5 +1,6 @@
 <script>
     import {is_empty} from "svelte/internal";
+    import ListingComponent from "./lib/ListingComponent.svelte";
 
     let inputFieldValue = '';
 
@@ -112,6 +113,7 @@
 
     <button type="submit">Save</button>
     <button type="button" on:click="{cancelForm}">Cancel</button>
+    <ListingComponent></ListingComponent>
 </form>
 
 
