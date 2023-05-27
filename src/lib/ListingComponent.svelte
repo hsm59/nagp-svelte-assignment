@@ -1,50 +1,70 @@
 <script>
-    import { onMount } from 'svelte';
-    import Node from "./Node.svelte";
+    import {onMount} from 'svelte';
 
-    let items = [];
+    import Node from './Node.svelte';
+
+    export var items = [
+        {
+            title: 'Parent 1',
+            children: ['Child 1', 'Child 2', 'Child 3'],
+            isOpen: false
+        },
+        {
+            title: 'Parent 2',
+            children: ['Child 4', 'Child 5', [
+                {
+                    title: 'Parent 3',
+                    children: ['Child 1', 'Child 2', 'Child 3'],
+                    isOpen: false
+                }]
+            ],
+            isOpen: false
+        }
+    ];
+
+    function toggleParent(index) {
+        items[index].isOpen = !items[index].isOpen;
+    }
 
     onMount(() => {
-        // Fetch the list of items from an API or set it manually
-        items = [
-            {
-                id: 1,
-                title: 'Item 1',
-                children: [
-                    { id: 11, title: 'Subitem 1-1' },
-                    { id: 12, title: 'Subitem 1-2' }
-                ]
-            },
-            {
-                id: 2,
-                title: 'Item 2',
-                children: [
-                    { id: 21, title: 'Subitem 2-1' },
-                    { id: 22, title: 'Subitem 2-2' }
-                ]
-            }
-        ];
+        // Using model
+        // items[0].isOpen = true;
     });
-
-    function toggleItem(item) {
-        item.expanded = !item.expanded;
-        item = { ...item }; // Trigger reactivity
-    }
 </script>
 
+<ul>
+    {#each items as parent, index}
+        <li>
+            <h3 on:click={() => toggleParent(index)}>{parent.title}</h3>
+            {#if parent.isOpen}
+                <ul>
+                    {#each parent.children as child}
+                        <li>
+                            {#if typeof child === 'object'}
+                                <svelte:self items={child}/>
+                            {:else}
+                                <Node {child}/>
+                            {/if}
+                        </li>
+                    {/each}
+                </ul>
+            {/if}
+        </li>
+    {/each}
+</ul>
+
 <style>
-    .item {
-        margin-bottom: 10px;
+    ul {
+        list-style-type: none;
+        padding-left: 0;
     }
 
-    .title {
+    h3 {
         cursor: pointer;
-        font-weight: bold;
+        margin-bottom: 0.5rem;
     }
 
-    .children {
-        padding-left: 10px;
+    ul ul {
+        margin-left: 1rem;
     }
 </style>
-
-<Node {...items}/>
