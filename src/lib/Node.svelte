@@ -3,9 +3,13 @@
 </script>
 
 <div>
-    {child}
+    <label>{child}</label>
 </div>
 
 <style>
-    /* Add your CSS styles here */
+    label {
+        font-size: large;
+        font-weight: bold;
+        margin-bottom: 12px;
+    }
 </style>

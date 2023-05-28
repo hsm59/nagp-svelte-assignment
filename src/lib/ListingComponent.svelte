@@ -7,31 +7,26 @@
     export var items = [
         {
             title: 'Folder 1',
-            children: ['Child 1', 'Child 2', 'Child 3'],
+            children: ['File 1', 'File 2', 'File 3'],
             isOpen: false
         },
         {
             title: 'Folder 2',
-            children: ['Child 4', 'Child 5', [
+            children: ['File 4', 'File 5', [
                 {
                     title: 'Folder 3',
-                    children: ['Child 1', 'Child 2', 'Child 3'],
+                    children: ['File 8', 'File 9', 'File 10'],
                     isOpen: false
                 },
-                {
-                    title: 'File 1',
-                    children: [],
-                    isOpen: false
-                }
-            ]
+                'File 10'
+            ],
+                'File 6'
             ],
             isOpen: false
         },
-        {
-            title: 'File 2',
-            children: [],
-            isOpen: false
-        }
+        'File 7',
+        'File 8',
+        'File 9',
     ];
 
     function toggleParent(index) {
@@ -47,21 +42,25 @@
 <ul>
     {#each items as parent, index}
         <li>
-            <h3 on:click={() => toggleParent(index)}>{parent.title}</h3>
-            {#if parent.isOpen}
-                <ul>
-                    {#if !is_empty(parent.children)}
-                        {#each parent.children as child}
-                            <li>
-                                {#if typeof child === 'object'}
-                                    <svelte:self items={child}/>
-                                {:else}
-                                    <Node {child}/>
-                                {/if}
-                            </li>
-                        {/each}
-                    {/if}
-                </ul>
+            {#if typeof parent === 'object'}
+                <h3 on:click={() => toggleParent(index)}>{parent.title}</h3>
+                {#if parent.isOpen}
+                    <ul>
+                        {#if !is_empty(parent.children)}
+                            {#each parent.children as child}
+                                <li>
+                                    {#if typeof child === 'object'}
+                                        <svelte:self items={child}/>
+                                    {:else}
+                                        <Node {child}/>
+                                    {/if}
+                                </li>
+                            {/each}
+                        {/if}
+                    </ul>
+                {/if}
+            {:else}
+                <h3>{parent}</h3>
             {/if}
         </li>
     {/each}
@@ -75,10 +74,10 @@
 
     h3 {
         cursor: pointer;
-        margin-bottom: 0.5rem;
+        margin-bottom: 1.5rem;
     }
 
     ul ul {
-        margin-left: 1rem;
+        margin-left: 4rem;
     }
 </style>

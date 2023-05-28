@@ -69,26 +69,6 @@
 
     }
 
-    /*let data = {
-        rootLevel: [
-        {
-            name: 'fileName',
-            type: 'file'
-        },
-        {
-            name: 'folderName',
-            type: 'folder',
-            levelOne: [{
-                name: 'fileNameLevel1',
-                type: 'file',
-            }, {
-                name: 'folderNameLevel1',
-                type: 'folder',
-            }]
-        }
-        ]
-    };*/
-
 </script>
 
 <form on:submit|preventDefault="{submitForm}">
