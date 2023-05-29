@@ -22,20 +22,28 @@
     let data = [
         {
             title: 'Folder 1',
-            children: [],
+            children: ['File 1', {
+                title: 'Folder 4',
+                children: [],
+                isOpen: false
+            }],
             isOpen: false
         },
         {
             title: 'Folder 2',
-            children: ['File 4', 'File 5', [
+            children: ['File 4', 'File 5',
                 {
                     title: 'Folder 3',
                     children: [],
                     isOpen: false
                 },
-            ],
                 'File 6'
             ],
+            isOpen: false
+        },
+        {
+            title: 'Folder 5',
+            children: [],
             isOpen: false
         },
         'File 7',
@@ -60,27 +68,30 @@
 
             return listOfItemsRootLevel.find(element => element === name) != null;
         } else {
-            // Level 1 - criteria - only the ones that have no folders inside of it
 
-            let listOfItemsLevel1 = data.map(element => {
+            let listOfItemsLevel1 = data
+                .filter(element => typeof element === 'object' && element.children.length > 0)
+                .flatMap(element => element.children);
+
+            console.log('items length ' + listOfItemsLevel1.length)
+
+            listOfItemsLevel1.forEach(element => {
+                console.log('items '+element);
+            });
+
+            let listOfChildrenLevel1 = listOfItemsLevel1.map(element => {
                 if (typeof element === 'object') {
-                    element.children.map(nestedElement => {
-                        if (typeof nestedElement === 'object') {
-                            return nestedElement.title;
-                        } else {
-                            return nestedElement;
-                        }
-                    });
+                    return element.title;
                 } else {
                     return element;
                 }
             });
 
-            listOfItemsLevel1.forEach(element => {
-                console.log(element);
+            listOfChildrenLevel1.forEach(element => {
+                console.log('children '+element);
             });
 
-            return listOfItemsLevel1.find(element => element === name) != null;
+            return listOfChildrenLevel1.find(element => element === name) != null;
         }
     }
 

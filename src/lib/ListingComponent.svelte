@@ -4,32 +4,17 @@
     import Node from './Node.svelte';
     import {is_empty} from "svelte/internal";
 
-    export var items/* = [
-        {
-            title: 'Folder 1',
-            children: [],
-            isOpen: false
-        },
-        {
-            title: 'Folder 2',
-            children: ['File 4', 'File 5', [
-                {
-                    title: 'Folder 3',
-                    children: [],
-                    isOpen: false
-                },
-            ],
-                'File 6'
-            ],
-            isOpen: false
-        },
-        'File 7',
-        'File 8',
-        'File 9',
-    ]*/;
+    export var items;
 
     function toggleParent(index) {
         items[index].isOpen = !items[index].isOpen;
+        items[index].children.forEach(element => {
+            if (typeof element === 'object') {
+                console.log(`onTap ${element.title}`)
+            } else {
+                console.log(`onTap ${element.toString()}`)
+            }
+        });
     }
 
     onMount(() => {
@@ -49,9 +34,11 @@
                             {#each parent.children as child}
                                 <li>
                                     {#if typeof child === 'object'}
-                                        <svelte:self items={child}/>
+                                        <!--This incase if there's second level of children-->
+                                        <!--<svelte:self items={child.children}/>-->
+                                        <h3>{child.title}</h3>
                                     {:else}
-                                        <Node {child}/>
+                                        <h3>{child}</h3>
                                     {/if}
                                 </li>
                             {/each}
