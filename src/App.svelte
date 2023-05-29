@@ -5,38 +5,120 @@
     let inputFieldValue = '';
 
     // TODO: on change of the dropdown value, check folders in data and display if there's one available
-    let dropdownValue = 'none';
+    let typeDropdownValue = 'none';
+    let levelDropdownValue = 'none';
 
     let selectedFolderValue = '';
     let displayFolderDropdown = false;
 
-    let data = [];
+    /**
+     * For storing File (String) - 'fileName';
+     * For storing Folder (Object) - {
+     *     title: 'folderName',
+     *     children: [],
+     *     isOpen: false,
+     * }
+     */
+    let data = [
+        {
+            title: 'Folder 1',
+            children: [],
+            isOpen: false
+        },
+        {
+            title: 'Folder 2',
+            children: ['File 4', 'File 5', [
+                {
+                    title: 'Folder 3',
+                    children: [],
+                    isOpen: false
+                },
+            ],
+                'File 6'
+            ],
+            isOpen: false
+        },
+        'File 7',
+        'File 8',
+        'File 9',
+    ];
 
-
-    function getFolders(level) {
-        if (level === 0) {
+    function checkNameIfExists(level, name) {
+        if (level === 'rootLevel') {
             // Root level
-            return data.filter((items) => items.type === 'folder')
+            let listOfItemsRootLevel = data.map(element => {
+                if (typeof element === 'object') {
+                    return element.title;
+                } else {
+                    return element;
+                }
+            });
+
+            listOfItemsRootLevel.forEach(element => {
+               console.log(element);
+            });
+
+            return listOfItemsRootLevel.find(element => element === name) != null;
         } else {
             // Level 1 - criteria - only the ones that have no folders inside of it
-            return data.filter((items) => items.data.find((level1Item) => level1Item.data.isEmpty))
+
+            let listOfItemsLevel1 = data.map(element => {
+                if (typeof element === 'object') {
+                    element.children.map(nestedElement => {
+                        if (typeof nestedElement === 'object') {
+                            return nestedElement.title;
+                        } else {
+                            return nestedElement;
+                        }
+                    });
+                } else {
+                    return element;
+                }
+            });
+
+            listOfItemsLevel1.forEach(element => {
+                console.log(element);
+            });
+
+            return listOfItemsLevel1.find(element => element === name) != null;
         }
+    }
+
+    function showRootLevelFoldersList() {
+        return data.filter(element => {
+            if (typeof element === 'object') {
+                return element;
+            }
+        });
+    }
+
+    function getFileName() {
+
     }
 
     function submitForm() {
         // TODO: Before saving make sure that the file name is unique and there aren't files / folders with the same name
-        if (dropdownValue === 'file') {
+        if (typeDropdownValue === 'none' || levelDropdownValue === 'none' || is_empty(inputFieldValue)) {
+            alert('Please enter all the values');
+        } else {
+
+            let flag = checkNameIfExists(levelDropdownValue, inputFieldValue)
+            console.log('whats the flag ' + flag);
+
+        }
+/*
+        if (typeDropdownValue === 'file') {
             if (is_empty(data)) {
                 data = [
                     {
                         'name': inputFieldValue,
-                        'type': dropdownValue
+                        'type': typeDropdownValue
                     }
                 ];
             } else {
                 data = [...data, {
                     'name': inputFieldValue,
-                    'type': dropdownValue
+                    'type': typeDropdownValue
                 }];
             }
 
@@ -46,7 +128,7 @@
                 data = [
                     {
                         'name': inputFieldValue,
-                        'type': dropdownValue,
+                        'type': typeDropdownValue,
                         'level1Data': []
                     }
                 ];
@@ -61,8 +143,7 @@
             }
 
         }
-
-        console.log('the data ' + data.length);
+*/
     }
 
     function cancelForm() {
@@ -76,12 +157,18 @@
     <input type="text" id="inputField" name="inputField" bind:value="{inputFieldValue}"><br><br>
 
     <label for="typeDropdown">Select Type: </label>
-    <select id="typeDropdown" name="typeDropdown" bind:value="{dropdownValue}">
+    <select id="typeDropdown" name="typeDropdown" bind:value="{typeDropdownValue}">
         <option value="file">File</option>
         <option value="folder">Folder</option>
     </select><br><br>
 
-    <!--  TODO: Display list of folder if there exists and if the user selects 'File' in the 'Type' dropdown  -->
+    <label for="levelDropdown">Select Level: </label>
+    <select id="levelDropdown" name="levelDropdown" bind:value="{levelDropdownValue}">
+        <option value="rootLevel">Root Level</option>
+        <option value="levelOne">Level One</option>
+    </select><br><br>
+
+    <!--  TODO: Display list of folder if exists and if the user selects 'File' in the 'Type' dropdown  -->
     <div style="display: {displayFolderDropdown ? 'block' : 'none'}">
         <label for="folderDropdown">Select Type: </label>
         <select id="folderDropdown" name="folderDropdown" bind:value="{selectedFolderValue}">
@@ -93,7 +180,7 @@
 
     <button type="submit">Save</button>
     <button type="button" on:click="{cancelForm}">Cancel</button>
-    <ListingComponent></ListingComponent>
+    <ListingComponent items = {data}/>
 </form>
 
 

@@ -4,10 +4,10 @@
     import Node from './Node.svelte';
     import {is_empty} from "svelte/internal";
 
-    export var items = [
+    export var items/* = [
         {
             title: 'Folder 1',
-            children: ['File 1', 'File 2', 'File 3'],
+            children: [],
             isOpen: false
         },
         {
@@ -15,10 +15,9 @@
             children: ['File 4', 'File 5', [
                 {
                     title: 'Folder 3',
-                    children: ['File 8', 'File 9', 'File 10'],
+                    children: [],
                     isOpen: false
                 },
-                'File 10'
             ],
                 'File 6'
             ],
@@ -27,7 +26,7 @@
         'File 7',
         'File 8',
         'File 9',
-    ];
+    ]*/;
 
     function toggleParent(index) {
         items[index].isOpen = !items[index].isOpen;
