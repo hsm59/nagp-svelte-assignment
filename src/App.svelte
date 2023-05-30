@@ -24,7 +24,11 @@
     let foldersDropdown = [];
 
     function resetValues() {
-
+        inputFieldValue = '';
+        typeDropdownValue = 'none';
+        levelDropdownValue = 'none';
+        selectedFolderValue = 'none';
+        displayFolderDropdown = false;
     }
 
     function checkDuplicateName(level, name) {
@@ -161,7 +165,7 @@
     }
 
     function cancelForm() {
-
+        resetValues();
     }
 
 </script>
