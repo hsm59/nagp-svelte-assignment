@@ -7,9 +7,10 @@
     // TODO: on change of the dropdown value, check folders in data and display if there's one available
     let typeDropdownValue = 'none';
     let levelDropdownValue = 'none';
+    $: showRootLevelFoldersList();
 
     let selectedFolderValue = '';
-    let displayFolderDropdown = false;
+    let displayFolderDropdown = true;
 
     /**
      * For storing File (String) - 'fileName';
@@ -50,6 +51,7 @@
         'File 8',
         'File 9',
     ];
+    let foldersDropdown = [];
 
     function checkNameIfExists(level, name) {
         if (level === 'rootLevel') {
@@ -63,7 +65,7 @@
             });
 
             listOfItemsRootLevel.forEach(element => {
-               console.log(element);
+                console.log(element);
             });
 
             return listOfItemsRootLevel.find(element => element === name) != null;
@@ -76,7 +78,7 @@
             console.log('items length ' + listOfItemsLevel1.length)
 
             listOfItemsLevel1.forEach(element => {
-                console.log('items '+element);
+                console.log('items ' + element);
             });
 
             let listOfChildrenLevel1 = listOfItemsLevel1.map(element => {
@@ -88,73 +90,79 @@
             });
 
             listOfChildrenLevel1.forEach(element => {
-                console.log('children '+element);
+                console.log('children ' + element);
             });
 
             return listOfChildrenLevel1.find(element => element === name) != null;
         }
     }
 
+    /**
+     * Show the root level folders if the user selects they want to store the folder / file
+     * on Level 1
+     */
     function showRootLevelFoldersList() {
-        return data.filter(element => {
-            if (typeof element === 'object') {
-                return element;
-            }
+        console.log('is the root level folder being run')
+
+        foldersDropdown = data
+            .filter(element => {
+                typeof element === 'object'
+            })
+            .map(element => {
+                return element.title;
         });
-    }
 
-    function getFileName() {
-
+        console.log(`whats the list of folders ${foldersDropdown.length}`);
     }
 
     function submitForm() {
         // TODO: Before saving make sure that the file name is unique and there aren't files / folders with the same name
         if (typeDropdownValue === 'none' || levelDropdownValue === 'none' || is_empty(inputFieldValue)) {
-            alert('Please enter all the values');
+            alert('Please Select / Enter all the values');
         } else {
 
-            let flag = checkNameIfExists(levelDropdownValue, inputFieldValue)
+            let flag = checkNameIfExists(levelDropdownValue, inputFieldValue);
             console.log('whats the flag ' + flag);
 
         }
-/*
-        if (typeDropdownValue === 'file') {
-            if (is_empty(data)) {
-                data = [
-                    {
-                        'name': inputFieldValue,
-                        'type': typeDropdownValue
+        /*
+                if (typeDropdownValue === 'file') {
+                    if (is_empty(data)) {
+                        data = [
+                            {
+                                'name': inputFieldValue,
+                                'type': typeDropdownValue
+                            }
+                        ];
+                    } else {
+                        data = [...data, {
+                            'name': inputFieldValue,
+                            'type': typeDropdownValue
+                        }];
                     }
-                ];
-            } else {
-                data = [...data, {
-                    'name': inputFieldValue,
-                    'type': typeDropdownValue
-                }];
-            }
-
-        } else {
-            // For folders
-            if (is_empty(data)) {
-                data = [
-                    {
-                        'name': inputFieldValue,
-                        'type': typeDropdownValue,
-                        'level1Data': []
-                    }
-                ];
-            } else {
-                // TODO: Check what's the name of the folder selected if there is any else store it in the root level
-
-                if (is_empty(selectedFolderValue)) {
 
                 } else {
+                    // For folders
+                    if (is_empty(data)) {
+                        data = [
+                            {
+                                'name': inputFieldValue,
+                                'type': typeDropdownValue,
+                                'level1Data': []
+                            }
+                        ];
+                    } else {
+                        // TODO: Check what's the name of the folder selected if there is any else store it in the root level
+
+                        if (is_empty(selectedFolderValue)) {
+
+                        } else {
+
+                        }
+                    }
 
                 }
-            }
-
-        }
-*/
+        */
     }
 
     function cancelForm() {
@@ -181,17 +189,17 @@
 
     <!--  TODO: Display list of folder if exists and if the user selects 'File' in the 'Type' dropdown  -->
     <div style="display: {displayFolderDropdown ? 'block' : 'none'}">
-        <label for="folderDropdown">Select Type: </label>
+        <label for="folderDropdown">Select Folder: </label>
         <select id="folderDropdown" name="folderDropdown" bind:value="{selectedFolderValue}">
-            {#each data as item}
-                <option value={item.name}>{item.name}</option>
+            {#each foldersDropdown as item}
+                <option value={item}>{item}</option>
             {/each}
         </select><br><br>
     </div>
 
     <button type="submit">Save</button>
     <button type="button" on:click="{cancelForm}">Cancel</button>
-    <ListingComponent items = {data}/>
+    <ListingComponent items={data}/>
 </form>
 
 
