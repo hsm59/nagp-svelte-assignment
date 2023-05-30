@@ -9,8 +9,8 @@
     let levelDropdownValue = 'none';
     $: showRootLevelFoldersList();
 
-    let selectedFolderValue = '';
-    let displayFolderDropdown = true;
+    let selectedFolderValue = 'none';
+    let displayFolderDropdown = false;
 
     /**
      * For storing File (String) - 'fileName';
@@ -53,7 +53,7 @@
     ];
     let foldersDropdown = [];
 
-    function checkNameIfExists(level, name) {
+    function checkDuplicateName(level, name) {
         if (level === 'rootLevel') {
             // Root level
             let listOfItemsRootLevel = data.map(element => {
@@ -75,22 +75,12 @@
                 .filter(element => typeof element === 'object' && element.children.length > 0)
                 .flatMap(element => element.children);
 
-            console.log('items length ' + listOfItemsLevel1.length)
-
-            listOfItemsLevel1.forEach(element => {
-                console.log('items ' + element);
-            });
-
             let listOfChildrenLevel1 = listOfItemsLevel1.map(element => {
                 if (typeof element === 'object') {
                     return element.title;
                 } else {
                     return element;
                 }
-            });
-
-            listOfChildrenLevel1.forEach(element => {
-                console.log('children ' + element);
             });
 
             return listOfChildrenLevel1.find(element => element === name) != null;
@@ -104,13 +94,11 @@
     function showRootLevelFoldersList() {
         console.log('is the root level folder being run')
 
+        displayFolderDropdown = levelDropdownValue === 'levelOne';
+
         foldersDropdown = data
-            .filter(element => {
-                typeof element === 'object'
-            })
-            .map(element => {
-                return element.title;
-        });
+            .filter(element => typeof element === 'object')
+            .map(element => element.title);
 
         console.log(`whats the list of folders ${foldersDropdown.length}`);
     }
@@ -120,9 +108,15 @@
         if (typeDropdownValue === 'none' || levelDropdownValue === 'none' || is_empty(inputFieldValue)) {
             alert('Please Select / Enter all the values');
         } else {
+            if (levelDropdownValue === 'levelOne' && selectedFolderValue === 'none') {
+                alert('Please Select the correct folder to save');
+            } else {
+                if (checkDuplicateName(levelDropdownValue, inputFieldValue)) {
+                    alert(`The file / folder name \"${inputFieldValue}\" already exists, please Enter a different name`)
+                } else {
 
-            let flag = checkNameIfExists(levelDropdownValue, inputFieldValue);
-            console.log('whats the flag ' + flag);
+                }
+            }
 
         }
         /*
@@ -182,7 +176,7 @@
     </select><br><br>
 
     <label for="levelDropdown">Select Level: </label>
-    <select id="levelDropdown" name="levelDropdown" bind:value="{levelDropdownValue}">
+    <select id="levelDropdown" name="levelDropdown" bind:value="{levelDropdownValue}" on:change={showRootLevelFoldersList}>
         <option value="rootLevel">Root Level</option>
         <option value="levelOne">Level One</option>
     </select><br><br>
