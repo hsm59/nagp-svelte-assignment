@@ -34,7 +34,7 @@
                 }
             });
 
-            return listOfItemsRootLevel.find(element => element === name) != null;
+            return listOfItemsRootLevel.find(element => element.toLowerCase() === name.toLowerCase()) != null;
         } else {
 
             let listOfItemsLevel1 = data
@@ -49,7 +49,7 @@
                 }
             });
 
-            return listOfChildrenLevel1.find(element => element === name) != null;
+            return listOfChildrenLevel1.find(element => element.toLowerCase() === name.toLowerCase()) != null;
         }
     }
 
@@ -81,27 +81,26 @@
                 if (checkDuplicateName(levelDropdownValue, inputFieldValue)) {
                     alert(`The file / folder name \"${inputFieldValue}\" already exists, please Enter a different name`)
                 } else {
-
+                    saveData()
                 }
             }
 
         }
     }
 
-    function saveData(name, type, level, folderValue) {
-        if (level === 'rootLevel') {
-            if (type === 'file') {
+    function saveData() {
+        if (levelDropdownValue === 'rootLevel') {
+            if (typeDropdownValue === 'file') {
 
             } else {
 
             }
         } else {
-            if (type === 'file') {
+            if (typeDropdownValue === 'file') {
 
             } else {
 
             }
-
         }
     }
 
