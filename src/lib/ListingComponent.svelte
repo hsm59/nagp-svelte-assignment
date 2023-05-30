@@ -8,13 +8,6 @@
 
     function toggleParent(index) {
         items[index].isOpen = !items[index].isOpen;
-        items[index].children.forEach(element => {
-            if (typeof element === 'object') {
-                console.log(`onTap ${element.title}`)
-            } else {
-                console.log(`onTap ${element.toString()}`)
-            }
-        });
     }
 
     onMount(() => {

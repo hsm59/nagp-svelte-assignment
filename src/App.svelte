@@ -20,37 +20,7 @@
      *     isOpen: false,
      * }
      */
-    let data = [
-        {
-            title: 'Folder 1',
-            children: ['File 1', {
-                title: 'Folder 4',
-                children: [],
-                isOpen: false
-            }],
-            isOpen: false
-        },
-        {
-            title: 'Folder 2',
-            children: ['File 4', 'File 5',
-                {
-                    title: 'Folder 3',
-                    children: [],
-                    isOpen: false
-                },
-                'File 6'
-            ],
-            isOpen: false
-        },
-        {
-            title: 'Folder 5',
-            children: [],
-            isOpen: false
-        },
-        'File 7',
-        'File 8',
-        'File 9',
-    ];
+    let data = [];
     let foldersDropdown = [];
 
     function checkDuplicateName(level, name) {
@@ -62,10 +32,6 @@
                 } else {
                     return element;
                 }
-            });
-
-            listOfItemsRootLevel.forEach(element => {
-                console.log(element);
             });
 
             return listOfItemsRootLevel.find(element => element === name) != null;
@@ -92,15 +58,12 @@
      * on Level 1
      */
     function showRootLevelFoldersList() {
-        console.log('is the root level folder being run')
-
-        displayFolderDropdown = levelDropdownValue === 'levelOne';
 
         foldersDropdown = data
             .filter(element => typeof element === 'object')
             .map(element => element.title);
 
-        console.log(`whats the list of folders ${foldersDropdown.length}`);
+        displayFolderDropdown = levelDropdownValue === 'levelOne' && foldersDropdown.length > 0;
     }
 
     function submitForm() {
@@ -108,8 +71,12 @@
         if (typeDropdownValue === 'none' || levelDropdownValue === 'none' || is_empty(inputFieldValue)) {
             alert('Please Select / Enter all the values');
         } else {
-            if (levelDropdownValue === 'levelOne' && selectedFolderValue === 'none') {
-                alert('Please Select the correct folder to save');
+            if (levelDropdownValue === 'levelOne') {
+                if (foldersDropdown.length === 0) {
+                    alert('There are no Folders to save in, please change your selection');
+                } else if (selectedFolderValue === 'none') {
+                    alert('Please Select the correct folder to save');
+                }
             } else {
                 if (checkDuplicateName(levelDropdownValue, inputFieldValue)) {
                     alert(`The file / folder name \"${inputFieldValue}\" already exists, please Enter a different name`)
@@ -119,44 +86,23 @@
             }
 
         }
-        /*
-                if (typeDropdownValue === 'file') {
-                    if (is_empty(data)) {
-                        data = [
-                            {
-                                'name': inputFieldValue,
-                                'type': typeDropdownValue
-                            }
-                        ];
-                    } else {
-                        data = [...data, {
-                            'name': inputFieldValue,
-                            'type': typeDropdownValue
-                        }];
-                    }
+    }
 
-                } else {
-                    // For folders
-                    if (is_empty(data)) {
-                        data = [
-                            {
-                                'name': inputFieldValue,
-                                'type': typeDropdownValue,
-                                'level1Data': []
-                            }
-                        ];
-                    } else {
-                        // TODO: Check what's the name of the folder selected if there is any else store it in the root level
+    function saveData(name, type, level, folderValue) {
+        if (level === 'rootLevel') {
+            if (type === 'file') {
 
-                        if (is_empty(selectedFolderValue)) {
+            } else {
 
-                        } else {
+            }
+        } else {
+            if (type === 'file') {
 
-                        }
-                    }
+            } else {
 
-                }
-        */
+            }
+
+        }
     }
 
     function cancelForm() {
