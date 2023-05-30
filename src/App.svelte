@@ -162,6 +162,8 @@
                 );
             }
         }
+
+        resetValues();
     }
 
     function cancelForm() {
