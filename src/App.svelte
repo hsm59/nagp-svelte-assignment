@@ -23,6 +23,10 @@
     let data = [];
     let foldersDropdown = [];
 
+    function resetValues() {
+
+    }
+
     function checkDuplicateName(level, name) {
         if (level === 'rootLevel') {
             // Root level
@@ -76,12 +80,14 @@
                     alert('There are no Folders to save in, please change your selection');
                 } else if (selectedFolderValue === 'none') {
                     alert('Please Select the correct folder to save');
+                } else {
+                    saveData();
                 }
             } else {
                 if (checkDuplicateName(levelDropdownValue, inputFieldValue)) {
                     alert(`The file / folder name \"${inputFieldValue}\" already exists, please Enter a different name`)
                 } else {
-                    saveData()
+                    saveData();
                 }
             }
 
@@ -91,15 +97,65 @@
     function saveData() {
         if (levelDropdownValue === 'rootLevel') {
             if (typeDropdownValue === 'file') {
-
+                if (is_empty(data)) {
+                    data = [inputFieldValue.trim()]
+                } else {
+                    data = [...data, inputFieldValue.trim()]
+                }
             } else {
-
+                if (is_empty(data)) {
+                    data = [{
+                        title: inputFieldValue.trim(),
+                        isOpen: false,
+                        children: []
+                    }]
+                } else {
+                    data = [...data, {
+                        title: inputFieldValue.trim(),
+                        isOpen: false,
+                        children: []
+                    }]
+                }
             }
         } else {
             if (typeDropdownValue === 'file') {
 
-            } else {
+                let newData = inputFieldValue.trim();
 
+                data = data.map(
+                    element => {
+                        if (element.title === selectedFolderValue) {
+                            return {
+                                title: element.title,
+                                isOpen: false,
+                                children: [...element.children, newData]
+                            };
+                        } else {
+                            return element;
+                        }
+                    }
+                );
+
+            } else {
+                let newData = {
+                    title: inputFieldValue.trim(),
+                    isOpen: false,
+                    children: []
+                };
+
+                data = data.map(
+                    element => {
+                        if (element.title === selectedFolderValue) {
+                            return {
+                                title: element.title,
+                                isOpen: false,
+                                children: [...element.children, newData]
+                            };
+                        } else {
+                            return element;
+                        }
+                    }
+                );
             }
         }
     }
