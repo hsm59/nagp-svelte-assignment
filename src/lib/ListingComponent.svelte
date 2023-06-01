@@ -1,7 +1,6 @@
 <script>
     import {onMount} from 'svelte';
 
-    import Node from './Node.svelte';
     import {is_empty} from "svelte/internal";
 
     export var items;
