@@ -6,7 +6,7 @@
   "main": "./src/App.svelte",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build  && cp \"_headers\" \"dist\"",
     "preview": "vite preview",
     "check": "svelte-check --tsconfig ./tsconfig.json"
   },
