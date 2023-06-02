@@ -3,7 +3,7 @@ import { svelte } from '@sveltejs/vite-plugin-svelte'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  /*build: {
+  build: {
     lib: {
       entry: 'src/App.svelte',
       name: 'NestedComponentPlugin',
@@ -16,6 +16,6 @@ export default defineConfig({
         },
       },
     },
-  },*/
+  },
   plugins: [svelte()],
 })

@@ -1,8 +1,16 @@
 {
   "name": "nagp-svelte-assignment",
-  "private": true,
-  "version": "0.0.0",
+  "private": false,
+  "version": "0.0.1",
   "type": "module",
+  "main": "dist/nagp-svelte-assignment.js",
+  "module": "dist/nagp-svelte-assignment.umd.cjs",
+  "exports": {
+    ".": {
+      "import": "./dist/nagp-svelte-assignment.umd.cjs",
+      "require": "./dist/nagp-svelte-assignment.js"
+    }
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",
