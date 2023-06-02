@@ -2,15 +2,15 @@
     import {is_empty} from "svelte/internal";
     import ListingComponent from "./lib/ListingComponent.svelte";
 
-    let inputFieldValue = '';
+    let input_field_value = '';
 
     // TODO: on change of the dropdown value, check folders in data and display if there's one available
-    let typeDropdownValue = 'none';
-    let levelDropdownValue = 'none';
+    let type_dropdown_value = 'none';
+    let level_dropdown_value = 'none';
     $: showRootLevelFoldersList();
 
-    let selectedFolderValue = 'none';
-    let displayFolderDropdown = false;
+    let selected_folder_value = 'none';
+    let display_folder_dropdown = false;
 
     /**
      * For storing File (String) - 'fileName';
@@ -21,14 +21,14 @@
      * }
      */
     let data = [];
-    let foldersDropdown = [];
+    let folders_dropdown = [];
 
     function resetValues() {
-        inputFieldValue = '';
-        typeDropdownValue = 'none';
-        levelDropdownValue = 'none';
-        selectedFolderValue = 'none';
-        displayFolderDropdown = false;
+        input_field_value = '';
+        type_dropdown_value = 'none';
+        level_dropdown_value = 'none';
+        selected_folder_value = 'none';
+        display_folder_dropdown = false;
     }
 
     function checkDuplicateName(level, name) {
@@ -67,29 +67,29 @@
      */
     function showRootLevelFoldersList() {
 
-        foldersDropdown = data
+        folders_dropdown = data
             .filter(element => typeof element === 'object')
             .map(element => element.title);
 
-        displayFolderDropdown = levelDropdownValue === 'levelOne' && foldersDropdown.length > 0;
+        display_folder_dropdown = level_dropdown_value === 'levelOne' && folders_dropdown.length > 0;
     }
 
     function submitForm() {
         // TODO: Before saving make sure that the file name is unique and there aren't files / folders with the same name
-        if (typeDropdownValue === 'none' || levelDropdownValue === 'none' || is_empty(inputFieldValue)) {
+        if (type_dropdown_value === 'none' || level_dropdown_value === 'none' || is_empty(input_field_value)) {
             alert('Please Select / Enter all the values');
         } else {
-            if (levelDropdownValue === 'levelOne') {
-                if (foldersDropdown.length === 0) {
+            if (level_dropdown_value === 'levelOne') {
+                if (folders_dropdown.length === 0) {
                     alert('There are no Folders to save in, please change your selection');
-                } else if (selectedFolderValue === 'none') {
+                } else if (selected_folder_value === 'none') {
                     alert('Please Select the correct folder to save');
                 } else {
                     saveData();
                 }
             } else {
-                if (checkDuplicateName(levelDropdownValue, inputFieldValue)) {
-                    alert(`The file / folder name \"${inputFieldValue}\" already exists, please Enter a different name`)
+                if (checkDuplicateName(level_dropdown_value, input_field_value)) {
+                    alert(`The file / folder name \"${input_field_value}\" already exists, please Enter a different name`)
                 } else {
                     saveData();
                 }
@@ -99,36 +99,36 @@
     }
 
     function saveData() {
-        if (levelDropdownValue === 'rootLevel') {
-            if (typeDropdownValue === 'file') {
+        if (level_dropdown_value === 'rootLevel') {
+            if (type_dropdown_value === 'file') {
                 if (is_empty(data)) {
-                    data = [inputFieldValue.trim()]
+                    data = [input_field_value.trim()]
                 } else {
-                    data = [...data, inputFieldValue.trim()]
+                    data = [...data, input_field_value.trim()]
                 }
             } else {
                 if (is_empty(data)) {
                     data = [{
-                        title: inputFieldValue.trim(),
+                        title: input_field_value.trim(),
                         isOpen: false,
                         children: []
                     }]
                 } else {
                     data = [...data, {
-                        title: inputFieldValue.trim(),
+                        title: input_field_value.trim(),
                         isOpen: false,
                         children: []
                     }]
                 }
             }
         } else {
-            if (typeDropdownValue === 'file') {
+            if (type_dropdown_value === 'file') {
 
-                let newData = inputFieldValue.trim();
+                let newData = input_field_value.trim();
 
                 data = data.map(
                     element => {
-                        if (element.title === selectedFolderValue) {
+                        if (element.title === selected_folder_value) {
                             return {
                                 title: element.title,
                                 isOpen: false,
@@ -142,14 +142,14 @@
 
             } else {
                 let newData = {
-                    title: inputFieldValue.trim(),
+                    title: input_field_value.trim(),
                     isOpen: false,
                     children: []
                 };
 
                 data = data.map(
                     element => {
-                        if (element.title === selectedFolderValue) {
+                        if (element.title === selected_folder_value) {
                             return {
                                 title: element.title,
                                 isOpen: false,
@@ -174,25 +174,25 @@
 
 <form on:submit|preventDefault="{submitForm}">
     <label for="inputField">Name: </label>
-    <input type="text" id="inputField" name="inputField" bind:value="{inputFieldValue}"><br><br>
+    <input type="text" id="inputField" name="inputField" bind:value="{input_field_value}"><br><br>
 
     <label for="typeDropdown">Select Type: </label>
-    <select id="typeDropdown" name="typeDropdown" bind:value="{typeDropdownValue}">
+    <select id="typeDropdown" name="typeDropdown" bind:value="{type_dropdown_value}">
         <option value="file">File</option>
         <option value="folder">Folder</option>
     </select><br><br>
 
     <label for="levelDropdown">Select Level: </label>
-    <select id="levelDropdown" name="levelDropdown" bind:value="{levelDropdownValue}" on:change={showRootLevelFoldersList}>
+    <select id="levelDropdown" name="levelDropdown" bind:value="{level_dropdown_value}" on:change={showRootLevelFoldersList}>
         <option value="rootLevel">Root Level</option>
         <option value="levelOne">Level One</option>
     </select><br><br>
 
     <!--  TODO: Display list of folder if exists and if the user selects 'File' in the 'Type' dropdown  -->
-    <div style="display: {displayFolderDropdown ? 'block' : 'none'}">
+    <div style="display: {display_folder_dropdown ? 'block' : 'none'}">
         <label for="folderDropdown">Select Folder: </label>
-        <select id="folderDropdown" name="folderDropdown" bind:value="{selectedFolderValue}">
-            {#each foldersDropdown as item}
+        <select id="folderDropdown" name="folderDropdown" bind:value="{selected_folder_value}">
+            {#each folders_dropdown as item}
                 <option value={item}>{item}</option>
             {/each}
         </select><br><br>

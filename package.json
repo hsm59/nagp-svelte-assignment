@@ -1,16 +1,9 @@
 {
   "name": "nagp-svelte-assignment",
   "private": false,
-  "version": "0.0.1",
+  "version": "0.0.10",
   "type": "module",
-  "main": "dist/nagp-svelte-assignment.js",
-  "module": "dist/nagp-svelte-assignment.umd.cjs",
-  "exports": {
-    ".": {
-      "import": "./dist/nagp-svelte-assignment.umd.cjs",
-      "require": "./dist/nagp-svelte-assignment.js"
-    }
-  },
+  "main": "./src/App.svelte",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -25,5 +18,8 @@
     "tslib": "^2.5.0",
     "typescript": "^5.0.2",
     "vite": "^4.3.2"
+  },
+  "dependencies": {
+    "esbuild": "^0.17.19"
   }
 }
