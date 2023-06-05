@@ -3,6 +3,10 @@
 
     import {is_empty} from "svelte/internal";
 
+
+    import Fa from 'svelte-fa'
+    import { faFolder, faFile } from '@fortawesome/free-solid-svg-icons'
+
     export var items;
 
     function toggleParent(index) {
@@ -19,7 +23,10 @@
     {#each items as parent, index}
         <li>
             {#if typeof parent === 'object'}
-                <h3 on:click={() => toggleParent(index)}>{parent.title}</h3>
+                <div class="icon-container">
+                    <Fa icon={faFolder}/>
+                    <h3 on:click={() => toggleParent(index)}>{parent.title}</h3>
+                </div>
                 {#if parent.isOpen}
                     <ul>
                         {#if !is_empty(parent.children)}
@@ -28,9 +35,15 @@
                                     {#if typeof child === 'object'}
                                         <!--This incase if there's second level of children-->
                                         <!--<svelte:self items={child.children}/>-->
-                                        <h3>{child.title}</h3>
+                                        <div class="icon-container">
+                                            <Fa icon={faFolder}/>
+                                            <h3>{child.title}</h3>
+                                        </div>
                                     {:else}
-                                        <h3>{child}</h3>
+                                        <div class="icon-container">
+                                            <Fa icon={faFile}/>
+                                            <h3>{child}</h3>
+                                        </div>
                                     {/if}
                                 </li>
                             {/each}
@@ -38,7 +51,10 @@
                     </ul>
                 {/if}
             {:else}
-                <h3>{parent}</h3>
+                <div class="icon-container">
+                    <Fa icon={faFile}/>
+                    <h3>{parent}</h3>
+                </div>
             {/if}
         </li>
     {/each}
@@ -52,10 +68,16 @@
 
     h3 {
         cursor: pointer;
-        margin-bottom: 1.5rem;
+        padding-left: 10px;
     }
 
     ul ul {
         margin-left: 4rem;
+    }
+
+    .icon-container {
+        display: flex;
+        align-items: center;
+        padding-bottom: 10px;
     }
 </style>

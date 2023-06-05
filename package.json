@@ -1,7 +1,7 @@
 {
   "name": "nagp-svelte-assignment",
   "private": false,
-  "version": "0.0.10",
+  "version": "0.0.11",
   "type": "module",
   "main": "./src/App.svelte",
   "scripts": {
@@ -20,6 +20,8 @@
     "vite": "^4.3.2"
   },
   "dependencies": {
-    "esbuild": "^0.17.19"
+    "@fortawesome/free-solid-svg-icons": "^6.4.0",
+    "esbuild": "^0.17.19",
+    "svelte-fa": "^3.0.4"
   }
 }

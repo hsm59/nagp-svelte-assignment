@@ -1,4 +1,4 @@
-<svelte:options tag="nested-component"/>
+<!--<svelte:options tag="nested-component"/>-->
 <script>
     import {is_empty} from "svelte/internal";
     import ListingComponent from "./lib/ListingComponent.svelte";

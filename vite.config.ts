@@ -18,8 +18,8 @@ export default defineConfig({
         },
     },
     plugins: [svelte({
-        compilerOptions:{
+        /*compilerOptions:{
             customElement: true
-        }
+        }*/
     })],
 })
